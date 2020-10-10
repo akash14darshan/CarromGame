@@ -56,6 +56,7 @@ class Token : MonoBehaviour
 
     public void SetDirection(Vector2 normal)
     {
+        transform.localEulerAngles = Vector3.zero;
         Arrow.gameObject.SetActive(true);
         lastFrame = Time.frameCount;
         Debug.Log(normal);
