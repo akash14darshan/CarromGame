@@ -13,8 +13,10 @@ class MainBoard : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        byte count = 0;
         foreach(var body in GetComponentsInChildren<Token>(true))
         {
+            body.ID = count++;
             Bodies.Add(body);
         }
     }

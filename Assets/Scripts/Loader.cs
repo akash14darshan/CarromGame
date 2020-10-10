@@ -9,7 +9,6 @@ class Loader : MonoBehaviour
     [SerializeField] GameObject Play;
     [SerializeField] float FadeSpeed = 5f;
     [SerializeField] GameObject MainGame;
-    [SerializeField] bool ShowSplash;
 
     float Alpha
     {
@@ -31,6 +30,10 @@ class Loader : MonoBehaviour
 
     IEnumerator Start()
     {
+        bool ShowSplash=false;
+#if !UNITY_EDITOR
+ShowSplash = true;
+#endif
         if(ShowSplash)
         {
             while (Alpha != 1f)

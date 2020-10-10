@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 class BoardStriker : MonoBehaviour
@@ -13,7 +14,33 @@ class BoardStriker : MonoBehaviour
     float MaxDisplacement;
     float Height;
     SpriteRenderer Renderer;
-    
+
+    readonly List<byte> CollidingTokenIDs = new List<byte>();
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        Token token = other.gameObject.GetComponent<Token>();
+        if(token != null)
+        {
+            Debug.Log("Enter Token found:" + token.ID);
+            CollidingTokenIDs.Add(token.ID);
+            return;
+        }
+        Debug.Log("Entered collision token not found:"+other.gameObject.name);
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        Token token = other.gameObject.GetComponent<Token>();
+        if (token != null)
+        {
+            Debug.Log("Exit Token found:" + token.ID);
+            CollidingTokenIDs.Remove(token.ID);
+            return;
+        }
+        Debug.Log("Exit collision token not found:" + other.gameObject.name);
+    }
+
     void Awake()
     {
         Renderer = GetComponent<SpriteRenderer>();
@@ -26,11 +53,6 @@ class BoardStriker : MonoBehaviour
         Mover.SetActive(true);
     }
 
-    public void ActivateDrag(bool value)
-    {
-        Collider.isTrigger = value;
-    }
-
     public void SetStrikerPosition(float normalizedPos)
     {
         transform.localPosition = new Vector2(Mathf.Clamp(normalizedPos * MaxDisplacement, -MaxDisplacement, MaxDisplacement),Height);
@@ -40,11 +62,12 @@ class BoardStriker : MonoBehaviour
 
     public bool CheckPosition()
     {
-        return Token.CollisionCount == 0;
+        return CollidingTokenIDs.Count == 0;
     }
 
     public void ResetMover(bool waitToRealign = false)
     {
+        Collider.isTrigger = true;
         SetStrikerPosition(0);
         if (!waitToRealign)
         {
@@ -70,6 +93,7 @@ class BoardStriker : MonoBehaviour
         {
             DragController.Begin(delegate(Vector2 ev) 
             {
+                Collider.isTrigger = false;
                 float finalMagnitude = ev.magnitude * Sensivitity;
                 StrikerBody.AddForce(new Vector2(ev.x * finalMagnitude, ev.y * finalMagnitude));
                 IsMoving = true;
