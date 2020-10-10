@@ -51,7 +51,7 @@ class BoardStriker : MonoBehaviour
 
     void OnMouseDown()
     {
-        if(!IsMoving)
+        if(!IsMoving && !Popup.IsActive)
         {
             DragController.Begin(delegate(Vector2 ev) 
             {
