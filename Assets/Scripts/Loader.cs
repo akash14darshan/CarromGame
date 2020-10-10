@@ -6,6 +6,7 @@ class Loader : MonoBehaviour
 {
     [SerializeField] GameObject Canvas;
     [SerializeField] Text Splash;
+    [SerializeField] GameObject Play;
     [SerializeField] float FadeSpeed = 5f;
     [SerializeField] GameObject MainGame;
     [SerializeField] bool ShowSplash;
@@ -24,6 +25,7 @@ class Loader : MonoBehaviour
     {
         Alpha = 0f;
         Canvas.SetActive(true);
+        Play.SetActive(false);
         MainGame.SetActive(false);
     }
 

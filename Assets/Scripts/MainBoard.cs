@@ -1,14 +1,53 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 class MainBoard : MonoBehaviour
 {
-    public static readonly List<Rigidbody2D> Bodies = new List<Rigidbody2D>();
+    public static readonly List<Token> Bodies = new List<Token>();
+    [SerializeField] Text Score;
+    short Score_value;
+    public static MainBoard Instance;
+
     void Awake()
     {
-        foreach(var body in GetComponentsInChildren<Rigidbody2D>(true))
+        Instance = this;
+        foreach(var body in GetComponentsInChildren<Token>(true))
         {
             Bodies.Add(body);
+        }
+    }
+
+    void OnEnable()
+    {
+        ResetGame();
+    }
+
+    public void ResetGame()
+    {
+        foreach (var body in Bodies)
+        {
+            body.Reset();
+            Score_value = 0;
+            Score.text = "0\nPoints";
+        }
+    }
+
+    public void AddScore(short value)
+    {
+        Score_value += value;
+        Score.text = Score_value.ToString()+ "\nPoints";
+    }
+
+    public static bool IsGameOver
+    {
+        get
+        {
+            foreach(var body in Bodies)
+            {
+                if (body.gameObject.activeInHierarchy) return false;
+            }
+            return true;
         }
     }
 
@@ -16,18 +55,14 @@ class MainBoard : MonoBehaviour
     {
         get
         {
-            bool hasStopped = true;
-            foreach (var body in Bodies)
+            foreach(var body in Bodies)
             {
-                if (body.IsSleeping() && body.velocity.magnitude == 0)
-                    continue;
-                else
+                if(body.gameObject.activeInHierarchy && (!body.RigidBody.IsSleeping() || body.RigidBody.velocity.magnitude != 0))
                 {
-                    hasStopped = false;
-                    break;
+                    return false;
                 }
             }
-            return hasStopped;
+            return true;
         }
     }
 }
