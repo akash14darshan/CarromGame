@@ -10,6 +10,7 @@ class Token : MonoBehaviour
     [SerializeField] GameObject Focus;
     public byte Point;
     int lastFrame;
+    bool HasAwakened = false;
     
     void Awake()
     {
@@ -17,6 +18,7 @@ class Token : MonoBehaviour
         OriginalPosition = transform.localPosition;
         Arrow.gameObject.SetActive(false);
         Focus.SetActive(false);
+        HasAwakened = true;
     }
 
     bool _isColliding;
@@ -69,7 +71,7 @@ class Token : MonoBehaviour
 
     public void Reset()
     {
-        if(OriginalPosition != Vector3.zero)
+        if(HasAwakened)
             transform.localPosition = OriginalPosition;
         IsColliding = false;
         gameObject.SetActive(true);

@@ -1208,6 +1208,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Score: {fileID: 18161176}
+  Striker: {fileID: 436942993}
 --- !u!1 &436942988
 GameObject:
   m_ObjectHideFlags: 0
@@ -1222,7 +1223,7 @@ GameObject:
   - component: {fileID: 436942991}
   - component: {fileID: 436942993}
   m_Layer: 0
-  m_Name: RigidBody
+  m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5437,7 +5438,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1975131433}
   m_Layer: 2
-  m_Name: BoardStriker
+  m_Name: Striker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

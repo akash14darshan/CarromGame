@@ -6,6 +6,7 @@ class MainBoard : MonoBehaviour
 {
     public static readonly List<Token> Bodies = new List<Token>();
     [SerializeField] Text Score;
+    [SerializeField] BoardStriker Striker;
     short Score_value;
     public static MainBoard Instance;
 
@@ -31,6 +32,7 @@ class MainBoard : MonoBehaviour
             Score_value = 0;
             Score.text = "0\nPoints";
         }
+        Striker.ResetMover();
     }
 
     public void AddScore(short value)

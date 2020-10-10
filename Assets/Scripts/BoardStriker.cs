@@ -47,6 +47,13 @@ class BoardStriker : MonoBehaviour
         return Token.CollisionCount == 0;
     }
 
+    public void ResetMover()
+    {
+        SetStrikerPosition(0);
+        IsMoving = false;
+        Mover.SetActive(true);
+    }
+
     void OnMouseDown()
     {
         if(!IsMoving && !Popup.IsActive)
@@ -86,17 +93,13 @@ class BoardStriker : MonoBehaviour
                 Popup.ShowConfirm("Game over", "You have finished the game. Do you want to replay?", () => 
                 {
                     MainBoard.Instance.ResetGame();
-                    SetStrikerPosition(0);
-                    IsMoving = false;
-                    Mover.SetActive(true);
+                    ResetMover();
                 },
                     () => MatchUI.Instance.Leave(false));
             }
             else
             {
-                SetStrikerPosition(0);
-                IsMoving = false;
-                Mover.SetActive(true);
+                ResetMover();
             }
         }
     }
