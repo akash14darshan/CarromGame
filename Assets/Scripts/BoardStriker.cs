@@ -65,25 +65,11 @@ class BoardStriker : MonoBehaviour
         return CollidingTokenIDs.Count == 0;
     }
 
-    public void ResetMover(bool waitToRealign = false)
+    public void ResetMover()
     {
         if(Collider)
             Collider.isTrigger = true;
         SetStrikerPosition(0);
-        if (!waitToRealign)
-        {
-            IsMoving = false;
-            Mover.SetActive(true);
-        }
-        else StartCoroutine(BeginReset());
-    }
-
-    IEnumerator BeginReset()
-    {
-        while(!MainBoard.HasStopped)
-        {
-            yield return null;
-        }
         IsMoving = false;
         Mover.SetActive(true);
     }
@@ -139,7 +125,7 @@ class BoardStriker : MonoBehaviour
             }
             else
             {
-                ResetMover(true);
+                ResetMover();
             }
         }
     }

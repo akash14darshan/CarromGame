@@ -37,7 +37,7 @@ class StrikerDrag : MonoBehaviour
         else
         {
             Vector3 Direction = -Pivot.InverseTransformPoint(Camera.ScreenToWorldPoint(Input.mousePosition));
-            Dir = new Vector2(Direction.x, Direction.y);
+            Dir = new Vector2(Direction.x, Direction.y)/4; //magnitude compensate factor
             if(Dir.magnitude > MaxMagnitude)
             {
                 Dir = (Dir / Dir.magnitude) * MaxMagnitude;

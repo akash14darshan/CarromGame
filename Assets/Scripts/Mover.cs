@@ -26,6 +26,11 @@ class Mover : MonoBehaviour
         SetStriker(0);
     }
 
+    void OnEnable()
+    {
+        SetStriker(0);
+    }
+
     void Update()
     {
         if(IsMouseDown)
