@@ -29,10 +29,6 @@ class BoardStriker : MonoBehaviour
     public void ActivateDrag(bool value)
     {
         Collider.isTrigger = value;
-        if(!value)
-        {
-            Token.CollisionCount = 0;
-        }
     }
 
     public void SetStrikerPosition(float normalizedPos)
@@ -47,9 +43,23 @@ class BoardStriker : MonoBehaviour
         return Token.CollisionCount == 0;
     }
 
-    public void ResetMover()
+    public void ResetMover(bool waitToRealign = false)
     {
         SetStrikerPosition(0);
+        if (!waitToRealign)
+        {
+            IsMoving = false;
+            Mover.SetActive(true);
+        }
+        else StartCoroutine(BeginReset());
+    }
+
+    IEnumerator BeginReset()
+    {
+        while(!MainBoard.HasStopped)
+        {
+            yield return null;
+        }
         IsMoving = false;
         Mover.SetActive(true);
     }
@@ -99,7 +109,7 @@ class BoardStriker : MonoBehaviour
             }
             else
             {
-                ResetMover();
+                ResetMover(true);
             }
         }
     }

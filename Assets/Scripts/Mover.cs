@@ -39,6 +39,7 @@ class Mover : MonoBehaviour
     {
         if(!Popup.IsActive)
         {
+            Token.CollisionCount = 0;
             LastPosition = Striker.localPosition.x;
             BoardStriker.ActivateDrag(true);
             IsMouseDown = true;
