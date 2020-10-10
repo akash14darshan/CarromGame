@@ -67,7 +67,8 @@ class BoardStriker : MonoBehaviour
 
     public void ResetMover(bool waitToRealign = false)
     {
-        Collider.isTrigger = true;
+        if(Collider)
+            Collider.isTrigger = true;
         SetStrikerPosition(0);
         if (!waitToRealign)
         {
@@ -91,6 +92,11 @@ class BoardStriker : MonoBehaviour
     {
         if(!IsMoving && !Popup.IsActive)
         {
+            if(!CheckPosition())
+            {
+                Popup.ShowMessage("Notice", "Striker is overlapping a token. Please move striker to an empty place");
+                return;
+            }
             DragController.Begin(delegate(Vector2 ev) 
             {
                 Collider.isTrigger = false;
