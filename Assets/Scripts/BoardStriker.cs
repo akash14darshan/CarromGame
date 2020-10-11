@@ -23,11 +23,8 @@ class BoardStriker : MonoBehaviour
         Token token = other.gameObject.GetComponent<Token>();
         if(token != null)
         {
-            Debug.Log("Enter Token found:" + token.ID);
             CollidingTokenIDs.Add(token.ID);
-            return;
         }
-        Debug.Log("Entered collision token not found:"+other.gameObject.name);
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -35,11 +32,8 @@ class BoardStriker : MonoBehaviour
         Token token = other.gameObject.GetComponent<Token>();
         if (token != null)
         {
-            Debug.Log("Exit Token found:" + token.ID);
             CollidingTokenIDs.Remove(token.ID);
-            return;
         }
-        Debug.Log("Exit collision token not found:" + other.gameObject.name);
     }
 
     void Awake()
@@ -90,6 +84,7 @@ class BoardStriker : MonoBehaviour
             }
             DragController.Begin(delegate(Vector2 ev) 
             {
+                MainBoard.Instance.AddMove();
                 Collider.isTrigger = false;
                 Focus.SetActive(false);
                 float finalMagnitude = ev.magnitude * Sensivitity;

@@ -1,13 +1,53 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 class MainBoard : MonoBehaviour
 {
     public static readonly List<Token> Bodies = new List<Token>();
-    [SerializeField] Text Score;
     [SerializeField] BoardStriker Striker;
-    short Score_value;
+    [SerializeField] Text _score_text;
+    [SerializeField] Text _time_text;
+    [SerializeField] Text _moves_text;
+    short _score_value;
+    short Score
+    {
+        get => _score_value;
+        set
+        {
+            _score_value = value;
+            _score_text.text = "Points\n" + value;
+        }
+    }
+
+    int _time_value;
+    int Time
+    {
+        get => _time_value;
+        set
+        {
+            _time_value = value;
+            TimeSpan t = TimeSpan.FromSeconds(value);
+            _time_text.text = "Time Elapsed\n" + string.Format("{0:D2}:{1:D2}:{2:D2}",
+                t.Hours,
+                t.Minutes,
+                t.Seconds);
+        }
+    }
+
+    short _moves_value;
+    short Moves
+    {
+        get => _moves_value;
+        set
+        {
+            _moves_value = value;
+            _moves_text.text = "Moves\n" + value;
+        }
+    }
+
     public static MainBoard Instance;
 
     void Awake()
@@ -26,21 +66,42 @@ class MainBoard : MonoBehaviour
         ResetGame();
     }
 
+    void OnDisable()
+    {
+        StopAllCoroutines();
+    }
+
     public void ResetGame()
     {
-        foreach (var body in Bodies)
-        {
-            body.Reset();
-            Score_value = 0;
-            Score.text = "0\nPoints";
-        }
+        StopAllCoroutines();
+        Bodies.ForEach(x => x.Reset());
+        Score = 0;
+        Moves = 0;
+        Time = 0;
         Striker.ResetMover();
     }
 
     public void AddScore(short value)
     {
-        Score_value += value;
-        Score.text = Score_value.ToString()+ "\nPoints";
+        Score += value;
+    }
+
+    public void AddMove()
+    {
+        if(Moves == 0)
+        {
+            StartCoroutine(MatchTimer());
+        }
+        Moves++;
+    }
+
+    IEnumerator MatchTimer()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(1f);
+            Time++;
+        }
     }
 
     public static bool IsGameOver
@@ -51,6 +112,7 @@ class MainBoard : MonoBehaviour
             {
                 if (body.gameObject.activeInHierarchy) return false;
             }
+            Instance.StopAllCoroutines();
             return true;
         }
     }
