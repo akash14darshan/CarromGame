@@ -8,6 +8,7 @@ class BoardStriker : MonoBehaviour
     [SerializeField] StrikerDrag DragController;
     [SerializeField] float Sensivitity;
     [SerializeField] GameObject Mover;
+    [SerializeField] GameObject Focus;
     bool IsMoving = false;
     CircleCollider2D Collider;
     Rigidbody2D StrikerBody;
@@ -50,6 +51,7 @@ class BoardStriker : MonoBehaviour
         Collider = GetComponent<CircleCollider2D>();
         StrikerBody = GetComponent<Rigidbody2D>();
         Collider.isTrigger = false;
+        Focus.SetActive(false);
         Mover.SetActive(true);
     }
 
@@ -68,7 +70,10 @@ class BoardStriker : MonoBehaviour
     public void ResetMover()
     {
         if(Collider)
+        {
             Collider.isTrigger = true;
+            Focus.SetActive(true);
+        }
         SetStrikerPosition(0);
         IsMoving = false;
         Mover.SetActive(true);
@@ -86,6 +91,7 @@ class BoardStriker : MonoBehaviour
             DragController.Begin(delegate(Vector2 ev) 
             {
                 Collider.isTrigger = false;
+                Focus.SetActive(false);
                 float finalMagnitude = ev.magnitude * Sensivitity;
                 StrikerBody.AddForce(new Vector2(ev.x * finalMagnitude, ev.y * finalMagnitude));
                 IsMoving = true;
@@ -127,6 +133,14 @@ class BoardStriker : MonoBehaviour
             {
                 ResetMover();
             }
+        }
+    }
+
+    void Update()
+    {
+        if(Focus.activeSelf)
+        {
+            Focus.transform.localPosition = transform.localPosition;
         }
     }
 }
